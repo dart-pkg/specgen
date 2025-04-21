@@ -21,12 +21,29 @@ Future<void> main(List<String> args) async {
     version = '0.0.1';
   }
   echo(version, 'version');
+  String? projectName /* = null*/;
+  String? description /* = null*/;
+  String? homepage /* = null*/;
+  String? repository /* = null*/;
+  String? sdk /* = null*/;
+  if (sys.fileExists('pubspec.yaml')) {
+    String content = sys.readFileString('pubspec.yaml');
+    dynamic obj = ts.fromYaml(content);
+    projectName = obj['name'] as String?;
+    description = obj['description'] as String?;
+    homepage = obj['homepage'] as String?;
+    repository = obj['repository'] as String?;
+    sdk = obj['environment']['sdk'] as String?;
+  }
   String cwd = sys.getCwd();
   echo(cwd, 'cwd');
-  String projectName = sys.pathFileName(cwd);
   echo(projectName);
-  projectName = projectName.replaceAll('.', '_').replaceAll('-', '_');
-  echo(projectName);
+  if (projectName == null) {
+    projectName = sys.pathFileName(cwd);
+    projectName = projectName.replaceAll('.', '_').replaceAll('-', '_');
+  }
+  description ??= '$projectName project';
+  sdk ??= '^3.7.2';
   List<String> packageList = dart_scan.packagesInSourceDirectory([
     './bin',
     './lib',
@@ -40,22 +57,16 @@ Future<void> main(List<String> args) async {
     packageList.add('dev:build_runner');
   }
   echo(packageList);
-  String? repository;
-  if ((await sys.httpGetBodyAsync(
-        'https://github.com/dart-pkg/$projectName/raw/main/README.md',
-      )) !=
-      null) {
-    repository = 'https://github.com/dart-pkg/$projectName';
-  }
   dynamic template = ts.fromJson(templateJson);
   template['name'] = projectName;
-  template['description'] = '$projectName project';
+  template['description'] = description;
   template['version'] = version;
+  template['homepage'] = homepage;
   template['repository'] = repository;
+  template['environment']['sdk'] = sdk;
   if (sys.fileExists('./bin/main.dart')) {
     template['executables'] = <String, String>{projectName: 'main'};
   }
-  //echo(ts.toYaml(template));
   String pubspacYamlTemplate = ts.toYaml(template);
   var file = io.File('pubspec.yaml');
   var sink = file.openWrite();
@@ -68,24 +79,9 @@ Future<void> main(List<String> args) async {
   }
   echo(cmdArgs);
   await sys.runAsync(['dart', 'pub', 'add'], cmdArgs);
-  // var result = await io.Process.run('bash', [
-  //   'dart',
-  //   'pub',
-  //   'deps',
-  //   '--no-dev',
-  //   '--style',
-  //   'list',
-  // ]);
-  // String stdout = result.stdout;
-  // List<String> lines = sys.textToLines(stdout);
-  // for (int i = 0; i < lines.length; i++) {
-  //   if (!lines[i].startsWith(' ')) {
-  //     print(lines[i]);
-  //   }
-  // }
   await sys.runAsync(['dart', 'format', '.']);
   if (packageList.contains('embed_annotation')) {
-    List<String> $generatedFiles = sys.pathFiles('./lib', true);
+    List<String> $generatedFiles = sys.pathFiles('.', true);
     $generatedFiles =
         $generatedFiles.where(($x) => $x.endsWith('.g.dart')).toList();
     for (int $i = 0; $i < $generatedFiles.length; $i++) {

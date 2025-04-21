@@ -14,7 +14,7 @@ const _$templateJson = r'''
   "homepage": null,
   "repository": null,
   "environment": {
-    "sdk": "^3.7.2"
+    "sdk": null
   },
   "dependencies": null,
   "dev_dependencies": null

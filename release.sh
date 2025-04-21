@@ -7,8 +7,7 @@ comment=$1
 
 echo $version
 
-#pubspec "$version"
-./bin/main.dart "$version"
+pubspec "$version"
 
 dart format .
 
