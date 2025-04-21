@@ -1,6 +1,8 @@
 name: "specgen"
-description: "specgen project"
-version: "0.0.1"
+description: |-
+  [specgen]
+  A program generating pubspec.yaml automatically.
+version: "2025.422.37"
 homepage: null
 repository: "https://github.com/dart-pkg/specgen"
 environment:
