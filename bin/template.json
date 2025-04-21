@@ -1,0 +1,12 @@
+{
+  "name": null,
+  "description": null,
+  "version": null,
+  "homepage": null,
+  "repository": null,
+  "environment": {
+    "sdk": "^3.7.2"
+  },
+  "dependencies": null,
+  "dev_dependencies": null
+}

@@ -1,0 +1,20 @@
+name: "specgen"
+description: "specgen project"
+version: "0.0.1"
+homepage: null
+repository: "https://github.com/dart-pkg/specgen"
+environment:
+  sdk: "^3.7.2"
+dependencies:
+  dart_scan: ^2025.421.2226
+  embed_annotation: ^1.2.2
+  output: ^1.0.6
+  sys: ^2025.421.2149
+  text_serializer: ^2025.421.1109
+dev_dependencies:
+  test: ^1.25.15
+  lints: ^5.1.1
+  embed: ^1.4.1
+  build_runner: ^2.4.15
+executables:
+  specgen: "main"
