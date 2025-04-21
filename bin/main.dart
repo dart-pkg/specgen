@@ -4,7 +4,7 @@ import 'dart:core';
 import 'dart:io' as io;
 import 'package:embed_annotation/embed_annotation.dart';
 import 'package:dart_scan/dart_scan.dart' as dart_scan;
-import 'package:output/output.dart';
+//import 'package:output/output.dart';
 import 'package:sys/sys.dart' as sys;
 import 'package:text_serializer/text_serializer.dart' as ts;
 
@@ -20,7 +20,7 @@ Future<void> main(List<String> args) async {
   } else {
     version = '0.0.1';
   }
-  echo(version, 'version');
+  //echo(version, 'version');
   String? projectName /* = null*/;
   String? description /* = null*/;
   String? homepage /* = null*/;
@@ -36,8 +36,8 @@ Future<void> main(List<String> args) async {
     sdk = obj['environment']['sdk'] as String?;
   }
   String cwd = sys.getCwd();
-  echo(cwd, 'cwd');
-  echo(projectName);
+  //echo(cwd, 'cwd');
+  //echo(projectName);
   if (projectName == null) {
     projectName = sys.pathFileName(cwd);
     projectName = projectName.replaceAll('.', '_').replaceAll('-', '_');
@@ -48,7 +48,7 @@ Future<void> main(List<String> args) async {
     './bin',
     './lib',
   ], './test');
-  echo(packageList);
+  //echo(packageList);
   packageList.remove(projectName);
   packageList.remove('dev:$projectName');
   packageList.add('dev:lints');
@@ -56,7 +56,7 @@ Future<void> main(List<String> args) async {
     packageList.add('dev:embed');
     packageList.add('dev:build_runner');
   }
-  echo(packageList);
+  //echo(packageList);
   dynamic template = ts.fromJson(templateJson);
   template['name'] = projectName;
   template['description'] = description;
@@ -73,13 +73,13 @@ Future<void> main(List<String> args) async {
   sink.write(pubspacYamlTemplate);
   await sink.flush();
   await sink.close();
-  List<String> cmdArgs = <String>[]; //<String>['dart', 'pub', 'add'];
+  List<String> cmdArgs = <String>[];
   for (int i = 0; i < packageList.length; i++) {
     cmdArgs.add(packageList[i]);
   }
-  echo(cmdArgs);
+  //echo(cmdArgs);
   await sys.runAsync(['dart', 'pub', 'add'], cmdArgs);
-  await sys.runAsync(['dart', 'format', '.']);
+  //await sys.runAsync(['dart', 'format', '.']);
   if (packageList.contains('embed_annotation')) {
     List<String> $generatedFiles = sys.pathFiles('.', true);
     $generatedFiles =

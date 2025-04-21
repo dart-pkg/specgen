@@ -11,3 +11,7 @@
 ## 2025.422.37
 
 - Modified bin/main.dart in order to inherit existing some informations form pubspec.yaml
+
+## 2025.422.59
+
+- Modified bin/main.dart. specgen now does not execute dart format
