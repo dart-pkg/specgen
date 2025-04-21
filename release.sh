@@ -33,4 +33,6 @@ git push origin "$tag"
 git push origin HEAD:main
 git remote -v
 
+find . -name "*.exe" -exec rm -f {} \;
+
 dart pub publish --force
