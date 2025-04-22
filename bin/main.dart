@@ -4,6 +4,7 @@ import 'dart:core';
 import 'dart:io' as io;
 import 'package:embed_annotation/embed_annotation.dart';
 import 'package:dart_scan/dart_scan.dart' as dart_scan;
+
 //import 'package:output/output.dart';
 import 'package:sys/sys.dart' as sys;
 import 'package:text_serializer/text_serializer.dart' as ts;
@@ -21,6 +22,8 @@ Future<void> main(List<String> args) async {
     version = '0.0.1';
   }
   //echo(version, 'version');
+  bool isFlutter = false;
+  String dart = 'dart';
   String? projectName /* = null*/;
   String? description /* = null*/;
   String? homepage /* = null*/;
@@ -30,6 +33,10 @@ Future<void> main(List<String> args) async {
   if (sys.fileExists('pubspec.yaml')) {
     String content = sys.readFileString('pubspec.yaml');
     template = ts.fromYaml(content);
+    if ((template as Map<String, dynamic>).containsKey('flutter')) {
+      isFlutter = true;
+      dart = 'flutter';
+    }
     projectName = template['name'] as String?;
     description = template['description'] as String?;
     homepage = template['homepage'] as String?;
@@ -37,7 +44,7 @@ Future<void> main(List<String> args) async {
     sdk = template['environment']['sdk'] as String?;
     template['dependencies'] = null;
     template['dev_dependencies'] = null;
-    (template as Map<String, dynamic>).remove('executables');
+    (template).remove('executables');
   }
   String cwd = sys.getCwd();
   //echo(cwd, 'cwd');
@@ -55,7 +62,12 @@ Future<void> main(List<String> args) async {
   //echo(packageList);
   packageList.remove(projectName);
   packageList.remove('dev:$projectName');
-  packageList.add('dev:lints');
+  packageList.remove('flutter');
+  packageList.remove('dev:flutter_test');
+  packageList.add(isFlutter ? 'dev:flutter_lints' : 'dev:lints');
+  if (isFlutter) {
+    packageList.add('cupertino_icons');
+  }
   if (packageList.contains('embed_annotation')) {
     packageList.add('dev:embed');
     packageList.add('dev:build_runner');
@@ -64,11 +76,19 @@ Future<void> main(List<String> args) async {
   template['name'] = projectName;
   template['description'] = description;
   template['version'] = version;
-  template['homepage'] = homepage;
-  template['repository'] = repository;
+  if (homepage != null) template['homepage'] = homepage;
+  if (repository != null) template['repository'] = repository;
   template['environment']['sdk'] = sdk;
   if (sys.fileExists('./bin/main.dart')) {
     template['executables'] = <String, String>{projectName: 'main'};
+  }
+  if (isFlutter) {
+    template['dependencies'] = <String, dynamic>{
+      'flutter': <String, dynamic>{'sdk': 'flutter'},
+    };
+    template['dev_dependencies'] = <String, dynamic>{
+      'flutter_test': <String, dynamic>{'sdk': 'flutter'},
+    };
   }
   String pubspacYamlTemplate = ts.toYaml(template);
   var file = io.File('pubspec.yaml');
@@ -81,8 +101,7 @@ Future<void> main(List<String> args) async {
     cmdArgs.add(packageList[i]);
   }
   //echo(cmdArgs);
-  await sys.runAsync$(['dart', 'pub', 'add'], rest: cmdArgs);
-  //await sys.runAsync(['dart', 'format', '.']);
+  await sys.runAsync$([dart, 'pub', 'add'], rest: cmdArgs);
   if (packageList.contains('embed_annotation')) {
     List<String> $generatedFiles = sys.pathFiles('.', true);
     $generatedFiles =
@@ -90,6 +109,6 @@ Future<void> main(List<String> args) async {
     for (int $i = 0; $i < $generatedFiles.length; $i++) {
       io.File($generatedFiles[$i]).deleteSync();
     }
-    await sys.runAsync$(['dart', 'run', 'build_runner', 'build']);
+    await sys.runAsync$([dart, 'run', 'build_runner', 'build']);
   }
 }

@@ -23,3 +23,7 @@
 ## 2025.423.643
 
 - specgen now keeps all of the settings in pubspec.yaml
+
+## 2025.423.809
+
+- specgen now supports flutter
