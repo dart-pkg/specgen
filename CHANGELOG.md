@@ -15,3 +15,7 @@
 ## 2025.422.59
 
 - Modified bin/main.dart. specgen now does not execute dart format
+
+## 2025.423.624
+
+- Modified main.dart to follow the changes of sys package

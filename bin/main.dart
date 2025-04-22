@@ -78,7 +78,7 @@ Future<void> main(List<String> args) async {
     cmdArgs.add(packageList[i]);
   }
   //echo(cmdArgs);
-  await sys.runAsync(['dart', 'pub', 'add'], cmdArgs);
+  await sys.runAsync$(['dart', 'pub', 'add'], rest: cmdArgs);
   //await sys.runAsync(['dart', 'format', '.']);
   if (packageList.contains('embed_annotation')) {
     List<String> $generatedFiles = sys.pathFiles('.', true);
@@ -87,6 +87,6 @@ Future<void> main(List<String> args) async {
     for (int $i = 0; $i < $generatedFiles.length; $i++) {
       io.File($generatedFiles[$i]).deleteSync();
     }
-    await sys.runAsync(['dart', 'run', 'build_runner', 'build']);
+    await sys.runAsync$(['dart', 'run', 'build_runner', 'build']);
   }
 }
