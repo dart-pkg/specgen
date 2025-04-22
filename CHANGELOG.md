@@ -19,3 +19,7 @@
 ## 2025.423.624
 
 - Modified main.dart to follow the changes of sys package
+
+## 2025.423.643
+
+- specgen now keeps all of the settings in pubspec.yaml

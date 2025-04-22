@@ -26,14 +26,18 @@ Future<void> main(List<String> args) async {
   String? homepage /* = null*/;
   String? repository /* = null*/;
   String? sdk /* = null*/;
+  dynamic template = ts.fromJson(templateJson);
   if (sys.fileExists('pubspec.yaml')) {
     String content = sys.readFileString('pubspec.yaml');
-    dynamic obj = ts.fromYaml(content);
-    projectName = obj['name'] as String?;
-    description = obj['description'] as String?;
-    homepage = obj['homepage'] as String?;
-    repository = obj['repository'] as String?;
-    sdk = obj['environment']['sdk'] as String?;
+    template = ts.fromYaml(content);
+    projectName = template['name'] as String?;
+    description = template['description'] as String?;
+    homepage = template['homepage'] as String?;
+    repository = template['repository'] as String?;
+    sdk = template['environment']['sdk'] as String?;
+    template['dependencies'] = null;
+    template['dev_dependencies'] = null;
+    (template as Map<String, dynamic>).remove('executables');
   }
   String cwd = sys.getCwd();
   //echo(cwd, 'cwd');
@@ -57,7 +61,6 @@ Future<void> main(List<String> args) async {
     packageList.add('dev:build_runner');
   }
   //echo(packageList);
-  dynamic template = ts.fromJson(templateJson);
   template['name'] = projectName;
   template['description'] = description;
   template['version'] = version;

@@ -2,11 +2,12 @@ name: "specgen"
 description: |-
   [specgen]
   A program generating pubspec.yaml automatically.
-version: "2025.423.624"
+version: "2025.423.643"
 homepage: null
 repository: "https://github.com/dart-pkg/specgen"
 environment:
   sdk: "^3.7.2"
+aaa: "this is aaa"
 dependencies:
   dart_scan: ^2025.421.2226
   embed_annotation: ^1.2.2
@@ -18,5 +19,6 @@ dev_dependencies:
   lints: ^5.1.1
   output: ^1.0.6
   test: ^1.25.15
+bbb: "this is bbb"
 executables:
   specgen: "main"
