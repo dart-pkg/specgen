@@ -1,8 +1,9 @@
 import 'dart:core';
-import 'dart:io' as io;
-import 'package:dart_scan/dart_scan.dart' as dart_scan;
-import 'package:sys/sys.dart' as sys;
-import 'package:yaml_edit/yaml_edit.dart' as ye;
+import 'dart:io' as io__;
+import 'package:dart_scan/dart_scan.dart' as dart_scan__;
+import 'package:sys/sys.dart' as sys__;
+import 'package:run/run.dart' as run__;
+import 'package:yaml_edit/yaml_edit.dart' as yaml_edit__;
 
 final String yamlTemplate = '''
 name:
@@ -16,7 +17,7 @@ dependencies:
 dev_dependencies:
 ''';
 
-extension on ye.YamlEditor {
+extension on yaml_edit__.YamlEditor {
   bool hasPath(List<String> $path) {
     try {
       parseAt($path);
@@ -32,19 +33,19 @@ Future<void> main(List<String> args) async {
   if (args.isNotEmpty) {
     version = args[0];
   }
-  String cwd = sys.getCwd();
+  String cwd = sys__.getCwd();
   bool isFlutter = false;
   String dart = 'dart';
-  ye.YamlEditor $ye = ye.YamlEditor(yamlTemplate);
-  String defaultProjectName = sys.pathFileName(cwd);
+  yaml_edit__.YamlEditor $ye = yaml_edit__.YamlEditor(yamlTemplate);
+  String defaultProjectName = sys__.pathFileName(cwd);
   defaultProjectName = defaultProjectName
       .replaceAll('.', '_')
       .replaceAll('-', '_');
   $ye.update(['name'], defaultProjectName);
   $ye.update(['description'], '$defaultProjectName project');
-  if (sys.fileExists('pubspec.yaml')) {
-    String content = sys.readFileString('pubspec.yaml');
-    $ye = ye.YamlEditor(content);
+  if (sys__.fileExists('pubspec.yaml')) {
+    String content = sys__.readFileString('pubspec.yaml');
+    $ye = yaml_edit__.YamlEditor(content);
     if ($ye.hasPath(['flutter'])) {
       isFlutter = true;
       dart = 'flutter';
@@ -54,7 +55,7 @@ Future<void> main(List<String> args) async {
     $ye.update(['version'], version);
   }
   String projectName = $ye.parseAt(['name']).value;
-  List<String> packageList = dart_scan.packagesInSourceDirectory([
+  List<String> packageList = dart_scan__.packagesInSourceDirectory([
     './bin',
     './lib',
   ], './test');
@@ -96,7 +97,7 @@ Future<void> main(List<String> args) async {
     }
   }
   String pubspacYamlTemplate = $ye.toString();
-  var file = io.File('pubspec.yaml');
+  var file = io__.File('pubspec.yaml');
   //var file = io.File('pubspec.txt');
   var sink = file.openWrite();
   sink.write(pubspacYamlTemplate);
@@ -106,14 +107,17 @@ Future<void> main(List<String> args) async {
   for (int i = 0; i < packageList.length; i++) {
     cmdArgs.add(packageList[i]);
   }
-  await sys.runAsync$([dart, 'pub', 'add'], rest: cmdArgs);
+  final $run = run__.Run();
+  //await sys__.runAsync$([dart, 'pub', 'add'], rest: cmdArgs);
+  await $run.$$(dart, arguments: ['pub', 'add', ...cmdArgs]);
   if (packageList.contains('embed_annotation')) {
-    List<String> $generatedFiles = sys.pathFiles('.', true);
+    List<String> $generatedFiles = sys__.pathFiles('.', true);
     $generatedFiles =
         $generatedFiles.where(($x) => $x.endsWith('.g.dart')).toList();
     for (int $i = 0; $i < $generatedFiles.length; $i++) {
-      io.File($generatedFiles[$i]).deleteSync();
+      io__.File($generatedFiles[$i]).deleteSync();
     }
-    await sys.runAsync$([dart, 'run', 'build_runner', 'build']);
+    //await sys__.runAsync$([dart, 'run', 'build_runner', 'build']);
+    await $run.$$(dart, arguments: ['pub', 'add', ...cmdArgs]);
   }
 }
