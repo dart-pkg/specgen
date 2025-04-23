@@ -47,3 +47,7 @@
 ## 2025.424.206
 
 - Updated package dependencies: run 2025.424.154 (was 2025.424.35)
+
+## 2025.424.304
+
+- Updated package dependencies: dart_scan 2025.424.257 (was 2025.421.2226)
