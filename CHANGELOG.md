@@ -27,3 +27,7 @@
 ## 2025.423.809
 
 - specgen now supports flutter
+
+## 2025.423.1516
+
+- String value within generated pubspec.yaml are not quoted now
