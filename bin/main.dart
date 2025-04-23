@@ -109,7 +109,7 @@ Future<void> main(List<String> args) async {
   }
   final $run = run__.Run();
   //await sys__.runAsync$([dart, 'pub', 'add'], rest: cmdArgs);
-  await $run.$$(dart, arguments: ['pub', 'add', ...cmdArgs]);
+  await $run.$$(dart, arguments: ['pub', 'add', ...cmdArgs], autoQuote: false);
   if (packageList.contains('embed_annotation')) {
     List<String> $generatedFiles = sys__.pathFiles('.', true);
     $generatedFiles =
@@ -118,6 +118,6 @@ Future<void> main(List<String> args) async {
       io__.File($generatedFiles[$i]).deleteSync();
     }
     //await sys__.runAsync$([dart, 'run', 'build_runner', 'build']);
-    await $run.$$(dart, arguments: ['pub', 'add', ...cmdArgs]);
+    await $run.$('$dart run build_runner build');
   }
 }
