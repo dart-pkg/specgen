@@ -1,97 +1,103 @@
-#! /usr/bin/env -S dt run
-
 import 'dart:core';
 import 'dart:io' as io;
-import 'package:embed_annotation/embed_annotation.dart';
 import 'package:dart_scan/dart_scan.dart' as dart_scan;
-
-//import 'package:output/output.dart';
 import 'package:sys/sys.dart' as sys;
-import 'package:text_serializer/text_serializer.dart' as ts;
+import 'package:yaml_edit/yaml_edit.dart' as ye;
 
-part 'main.g.dart';
+final String yamlTemplate = '''
+name:
+description:
+version: 0.0.1
+homepage:
+repository:
+environment:
+  sdk: ^3.7.2
+dependencies:
+dev_dependencies:
+''';
 
-@EmbedStr('template.json')
-const templateJson = _$templateJson;
+extension on ye.YamlEditor {
+  bool hasPath(List<String> $path) {
+    try {
+      parseAt($path);
+      return true;
+    } catch ($e) {
+      return false;
+    }
+  }
+}
 
 Future<void> main(List<String> args) async {
-  String version = '';
+  String? version;
   if (args.isNotEmpty) {
     version = args[0];
-  } else {
-    version = '0.0.1';
   }
-  //echo(version, 'version');
+  String cwd = sys.getCwd();
   bool isFlutter = false;
   String dart = 'dart';
-  String? projectName /* = null*/;
-  String? description /* = null*/;
-  String? homepage /* = null*/;
-  String? repository /* = null*/;
-  String? sdk /* = null*/;
-  dynamic template = ts.fromJson(templateJson);
+  ye.YamlEditor $ye = ye.YamlEditor(yamlTemplate);
+  String defaultProjectName = sys.pathFileName(cwd);
+  defaultProjectName = defaultProjectName
+      .replaceAll('.', '_')
+      .replaceAll('-', '_');
+  $ye.update(['name'], defaultProjectName);
+  $ye.update(['description'], '$defaultProjectName project');
   if (sys.fileExists('pubspec.yaml')) {
     String content = sys.readFileString('pubspec.yaml');
-    template = ts.fromYaml(content);
-    if ((template as Map<String, dynamic>).containsKey('flutter')) {
+    $ye = ye.YamlEditor(content);
+    if ($ye.hasPath(['flutter'])) {
       isFlutter = true;
       dart = 'flutter';
     }
-    projectName = template['name'] as String?;
-    description = template['description'] as String?;
-    homepage = template['homepage'] as String?;
-    repository = template['repository'] as String?;
-    sdk = template['environment']['sdk'] as String?;
-    template['dependencies'] = null;
-    template['dev_dependencies'] = null;
-    (template).remove('executables');
   }
-  String cwd = sys.getCwd();
-  //echo(cwd, 'cwd');
-  //echo(projectName);
-  if (projectName == null) {
-    projectName = sys.pathFileName(cwd);
-    projectName = projectName.replaceAll('.', '_').replaceAll('-', '_');
+  if (version != null) {
+    $ye.update(['version'], version);
   }
-  description ??= '$projectName project';
-  sdk ??= '^3.7.2';
+  String projectName = $ye.parseAt(['name']).value;
   List<String> packageList = dart_scan.packagesInSourceDirectory([
     './bin',
     './lib',
   ], './test');
-  //echo(packageList);
   packageList.remove(projectName);
   packageList.remove('dev:$projectName');
   packageList.remove('flutter');
   packageList.remove('dev:flutter_test');
   packageList.add(isFlutter ? 'dev:flutter_lints' : 'dev:lints');
-  if (isFlutter) {
-    packageList.add('cupertino_icons');
-  }
   if (packageList.contains('embed_annotation')) {
     packageList.add('dev:embed');
     packageList.add('dev:build_runner');
   }
-  //echo(packageList);
-  template['name'] = projectName;
-  template['description'] = description;
-  template['version'] = version;
-  if (homepage != null) template['homepage'] = homepage;
-  if (repository != null) template['repository'] = repository;
-  template['environment']['sdk'] = sdk;
-  if (sys.fileExists('./bin/main.dart')) {
-    template['executables'] = <String, String>{projectName: 'main'};
+  if ($ye.hasPath(['dependencies'])) {
+    if (!isFlutter) {
+      $ye.remove(['dependencies']);
+    } else {
+      dynamic $dep = $ye.parseAt(['dependencies']).value;
+      List<dynamic> $keys = $dep.keys.toList();
+      for (int i = 0; i < $keys.length; i++) {
+        String $key = $keys[i];
+        if ($key != 'flutter' && $key != 'cupertino_icons') {
+          $ye.remove(['dependencies', $key]);
+        }
+      }
+    }
   }
-  if (isFlutter) {
-    template['dependencies'] = <String, dynamic>{
-      'flutter': <String, dynamic>{'sdk': 'flutter'},
-    };
-    template['dev_dependencies'] = <String, dynamic>{
-      'flutter_test': <String, dynamic>{'sdk': 'flutter'},
-    };
+  if ($ye.hasPath(['dev_dependencies'])) {
+    if (!isFlutter) {
+      $ye.remove(['dev_dependencies']);
+    } else {
+      dynamic $dep = $ye.parseAt(['dev_dependencies']).value;
+      List<dynamic> $keys = $dep.keys.toList();
+      for (int i = 0; i < $keys.length; i++) {
+        String $key = $keys[i];
+        if ($key != 'flutter_test' && $key != 'flutter_lints') {
+          $ye.remove(['dev_dependencies', $key]);
+        }
+      }
+    }
   }
-  String pubspacYamlTemplate = ts.toYaml(template);
+  String pubspacYamlTemplate = $ye.toString();
   var file = io.File('pubspec.yaml');
+  //var file = io.File('pubspec.txt');
   var sink = file.openWrite();
   sink.write(pubspacYamlTemplate);
   await sink.flush();
@@ -100,7 +106,6 @@ Future<void> main(List<String> args) async {
   for (int i = 0; i < packageList.length; i++) {
     cmdArgs.add(packageList[i]);
   }
-  //echo(cmdArgs);
   await sys.runAsync$([dart, 'pub', 'add'], rest: cmdArgs);
   if (packageList.contains('embed_annotation')) {
     List<String> $generatedFiles = sys.pathFiles('.', true);

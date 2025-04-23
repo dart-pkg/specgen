@@ -31,3 +31,7 @@
 ## 2025.423.1516
 
 - String value within generated pubspec.yaml are not quoted now
+
+## 2025.423.1756
+
+- Rewrote main.dart using yaml_edit package
