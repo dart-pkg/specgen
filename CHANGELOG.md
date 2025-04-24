@@ -55,3 +55,7 @@
 ## 2025.424.1215
 
 - specgen now seraches current directory (non-recursively)
+
+## 2025.424.1907
+
+- Removed dependency to run package

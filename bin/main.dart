@@ -2,7 +2,7 @@ import 'dart:core';
 import 'dart:io' as io__;
 import 'package:dart_scan/dart_scan.dart' as dart_scan__;
 import 'package:sys/sys.dart' as sys__;
-import 'package:run/run.dart' as run__;
+import 'package:std/command_runner.dart' as run__;
 import 'package:yaml_edit/yaml_edit.dart' as yaml_edit__;
 
 final String yamlTemplate = '''
@@ -108,9 +108,12 @@ Future<void> main(List<String> args) async {
   for (int i = 0; i < packageList.length; i++) {
     cmdArgs.add(packageList[i]);
   }
-  final $run = run__.Run();
-  //await sys__.runAsync$([dart, 'pub', 'add'], rest: cmdArgs);
-  await $run.$$(dart, arguments: ['pub', 'add', ...cmdArgs], autoQuote: false);
+  final $run = run__.CommandRunner();
+  await $run.run$(
+    dart,
+    arguments: ['pub', 'add', ...cmdArgs],
+    autoQuote: false,
+  );
   if (packageList.contains('embed_annotation')) {
     List<String> $generatedFiles = sys__.pathFiles('.', true);
     $generatedFiles =
@@ -118,7 +121,6 @@ Future<void> main(List<String> args) async {
     for (int $i = 0; $i < $generatedFiles.length; $i++) {
       io__.File($generatedFiles[$i]).deleteSync();
     }
-    //await sys__.runAsync$([dart, 'run', 'build_runner', 'build']);
-    await $run.$('$dart run build_runner build');
+    await $run.run('$dart run build_runner build');
   }
 }
