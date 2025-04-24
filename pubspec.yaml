@@ -13,10 +13,10 @@ executables:
   specgen: main
 dependencies:
   dart_scan: ^2025.424.1203
-  std: ^2025.424.1835
+  output: ^1.0.7
+  std: ^2025.424.1957
   sys: ^2025.424.1853
   yaml_edit: ^2.2.2
 dev_dependencies:
-  lints: ^5.1.1
-  output: ^1.0.7
   test: ^1.25.15
+  lints: ^5.1.1
