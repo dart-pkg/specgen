@@ -35,6 +35,12 @@ Future<void> main(List<String> args) async {
     version = args[0];
   }
   String cwd = sys__.getCwd();
+  String fn = sys__.pathFileName(cwd);
+  if (fn == 'bin' || fn == 'lib' || fn == 'test') {
+    cwd = sys__.pathDirectoryName(cwd);
+    sys__.setCwd(cwd);
+  }
+  echo(cwd, 'cwd');
   bool isFlutter = false;
   String dart = 'dart';
   yaml_edit__.YamlEditor $ye = yaml_edit__.YamlEditor(yamlTemplate);

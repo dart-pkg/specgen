@@ -59,3 +59,7 @@
 ## 2025.424.1907
 
 - Removed dependency to run package
+
+## 2025.425.216
+
+- specgen calls protoc when .proto files found
