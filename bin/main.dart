@@ -56,6 +56,7 @@ Future<void> main(List<String> args) async {
   }
   String projectName = $ye.parseAt(['name']).value;
   List<String> packageList = dart_scan__.packagesInSourceDirectory([
+    '*.',
     './bin',
     './lib',
   ], './test');

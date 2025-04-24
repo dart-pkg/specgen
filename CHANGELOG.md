@@ -51,3 +51,7 @@
 ## 2025.424.304
 
 - Updated package dependencies: dart_scan 2025.424.257 (was 2025.421.2226)
+
+## 2025.424.1215
+
+- specgen now seraches current directory (non-recursively)
