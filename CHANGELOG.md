@@ -63,3 +63,7 @@
 ## 2025.425.216
 
 - specgen calls protoc when .proto files found
+
+## 2025.425.2034
+
+- Fixed bug of creating lib/src/generated dir even if .proto does not exist

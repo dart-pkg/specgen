@@ -133,12 +133,13 @@ Future<void> main(List<String> args) async {
   List<String> protos = sys__.pathFiles('.', true);
   protos = protos.where((x) => x.endsWith('.proto')).toList();
   echo(protos, 'protos');
-  await io__.Directory('./lib/src/generated').create(recursive: true);
-  for (int i = 0; i < protos.length; i++) {
-    String proto = protos[i];
-    $run.run(
-      //'protoc --dart_out=grpc:lib/src/generated -Iprotos "${protos[i]}"',
-      'protoc --dart_out=grpc:lib/src/generated -I"${sys__.pathDirectoryName(proto)}" "${sys__.pathFileName(proto)}"',
-    );
+  if (protos.isNotEmpty) {
+    await io__.Directory('./lib/src/generated').create(recursive: true);
+    for (int i = 0; i < protos.length; i++) {
+      String proto = protos[i];
+      $run.run(
+        'protoc --dart_out=grpc:lib/src/generated -I"${sys__.pathDirectoryName(proto)}" "${sys__.pathFileName(proto)}"',
+      );
+    }
   }
 }
