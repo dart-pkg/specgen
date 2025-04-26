@@ -1,3 +1,5 @@
+#! /usr/bin/env my-dart
+
 import 'dart:core';
 import 'dart:io' as io__;
 import 'package:dart_scan/dart_scan.dart' as dart_scan__;
@@ -116,11 +118,7 @@ Future<void> main(List<String> args) async {
     cmdArgs.add(packageList[i]);
   }
   final $run = run__.CommandRunner();
-  await $run.run$(
-    dart,
-    arguments: ['pub', 'add', ...cmdArgs],
-    autoQuote: false,
-  );
+  await $run.run$([dart, 'pub', 'add', ...cmdArgs], autoQuote: false);
   if (packageList.contains('embed_annotation')) {
     List<String> $generatedFiles = sys__.pathFiles('.', true);
     $generatedFiles =

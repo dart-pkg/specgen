@@ -44,9 +44,9 @@ dos2unix CHANGELOG.md
 dart pub publish --force
 
 cd $cwd
-tag="PROGRAM-$version"
+tag="specgen-$version"
 git add .
-git commit -m"PROGRAM: $comment"
+git commit -m"specgen: $comment"
 git tag -a "$tag" -m"$tag"
 git push origin "$tag"
 git push origin HEAD:main
