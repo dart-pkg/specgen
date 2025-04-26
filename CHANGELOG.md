@@ -67,3 +67,20 @@
 ## 2025.425.2034
 
 - Fixed bug of creating lib/src/generated dir even if .proto does not exist
+
+## 2025.426.2002
+
+- Update dependencies
+
+```
+--- a/pubspec.yaml
++++ b/pubspec.yaml
+-version: 2025.425.2034
++version: 2025.426.2002
+-  dart_scan: ^2025.424.1203
++  dart_scan: ^2025.426.1731
+-  std: ^2025.425.2018
+-  sys: ^2025.425.243
++  std: ^2025.426.1637
++  sys: ^2025.426.1725
+```
