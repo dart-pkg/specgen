@@ -131,3 +131,20 @@
 -  sys: ^2025.426.2256
 +  sys: ^2025.427.1718
 ```
+
+## 2025.427.2204
+
+- Introduced yaml_magic package
+
+```
+--- a/pubspec.yaml
++++ b/pubspec.yaml
+-version: 2025.427.1747
+-homepage:
++version: 2025.427.2204
++homepage: 
+-  dart_scan: ^2025.427.1743
++  dart_scan: ^2025.427.2004
+-  yaml_edit: ^2.2.2
++  yaml_magic: ^1.0.6
+```

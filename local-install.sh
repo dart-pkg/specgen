@@ -3,7 +3,8 @@ set -uvx
 set -e
 cwd=`pwd`
 
-pubspec
+#pubspec
+my-dart bin/main.dart
 
 dart format .
 
