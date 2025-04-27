@@ -159,3 +159,14 @@
 -version: 2025.427.2204
 +version: 2025.427.2226
 ```
+
+## 2025.427.2259
+
+- Fixed bug of redundant newlines
+
+```
+--- a/pubspec.yaml
++++ b/pubspec.yaml
+-version: 2025.427.2226
++version: 2025.427.2259
+```

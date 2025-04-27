@@ -4,7 +4,8 @@ set -e
 cwd=`pwd`
 
 #pubspec
-my-dart bin/main.dart
+dart pub get
+dart bin/main.dart
 
 dart format .
 

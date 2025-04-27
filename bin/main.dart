@@ -65,26 +65,28 @@ Future<void> main(List<String> args) async {
     yamlMagic['name'] = defaultProjectName;
     yamlMagic['description'] = '$defaultProjectName project';
   }
-  // if (sys__.fileExists('pubspec.yaml')) {
-  //   String content = sys__.readFileString('pubspec.yaml');
-  //   $ye = yaml_edit__.YamlEditor(content);
-  //   if ($ye.hasPath(['flutter'])) {
-  //     isFlutter = true;
-  //     dart = 'flutter';
-  //   }
-  // }
   if (yamlMagic['flutter'] != null) {
     isFlutter = true;
     dart = 'flutter';
   }
   if (version != null) {
-    // $ye.update(['version'], version);
     yamlMagic['version'] = version;
   }
-  sys__.writeFileString(
-    'pubspec.yaml',
-    '${yamlMagic.toString().trimRight()}\n',
-  );
+  String yaml = yamlMagic.toString();
+  List<String> lines1 = sys__.textToLines(yaml);
+  List<String> lines2 = <String>[];
+  for (int i = 0; i < lines1.length; i++) {
+    if (i > 0) {
+      if (lines1[i] == '' && lines1[i - 1] == '') {
+        continue;
+      }
+    }
+    lines2.add(lines1[i]);
+  }
+  echo(lines2, r'lines2');
+  //yaml = '${lines2.join('\n')}\n';
+  yaml = lines2.join('\n');
+  sys__.writeFileString('pubspec.yaml', yaml);
   // String projectName = $ye.parseAt(['name']).value;
   final $run = run__.CommandRunner();
   String projectName = yamlMagic['name'];
@@ -121,45 +123,6 @@ Future<void> main(List<String> args) async {
     packageList.add('dev:embed');
     packageList.add('dev:build_runner');
   }
-  // if ($ye.hasPath(['dependencies'])) {
-  //   if (!isFlutter) {
-  //     $ye.remove(['dependencies']);
-  //   } else {
-  //     dynamic $dep = $ye.parseAt(['dependencies']).value;
-  //     List<dynamic> $keys = $dep.keys.toList();
-  //     for (int i = 0; i < $keys.length; i++) {
-  //       String $key = $keys[i];
-  //       if ($key != 'flutter' && $key != 'cupertino_icons') {
-  //         $ye.remove(['dependencies', $key]);
-  //       }
-  //     }
-  //   }
-  // }
-  // if ($ye.hasPath(['dev_dependencies'])) {
-  //   if (!isFlutter) {
-  //     $ye.remove(['dev_dependencies']);
-  //   } else {
-  //     dynamic $dep = $ye.parseAt(['dev_dependencies']).value;
-  //     List<dynamic> $keys = $dep.keys.toList();
-  //     for (int i = 0; i < $keys.length; i++) {
-  //       String $key = $keys[i];
-  //       if ($key != 'flutter_test' && $key != 'flutter_lints') {
-  //         $ye.remove(['dev_dependencies', $key]);
-  //       }
-  //     }
-  //   }
-  // }
-  // String pubspacYamlTemplate = $ye.toString();
-  // var file = io__.File('pubspec.yaml');
-  // //var file = io.File('pubspec.txt');
-  // var sink = file.openWrite();
-  // sink.write(pubspacYamlTemplate);
-  // await sink.flush();
-  // await sink.close();
-  // List<String> cmdArgs = <String>[];
-  // for (int i = 0; i < packageList.length; i++) {
-  //   cmdArgs.add(packageList[i]);
-  // }
   await $run.run$([dart, 'pub', 'add', ...packageList], autoQuote: false);
   if (packageList.contains('embed_annotation')) {
     List<String> $generatedFiles = sys__.pathFiles('.', true);
