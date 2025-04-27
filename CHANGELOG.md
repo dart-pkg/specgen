@@ -205,3 +205,16 @@
 -version: 2025.427.2326
 +version: 2025.427.2341
 ```
+
+## 2025.428.28
+
+- Introduced handling of path dependencies and git dependencies
+
+```
+--- a/pubspec.yaml
++++ b/pubspec.yaml
+-version: 2025.427.2341
++version: 2025.428.28
+-  dart_scan: ^2025.427.2004
++  dart_scan: ^2025.428.15
+```

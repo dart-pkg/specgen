@@ -76,28 +76,38 @@ Future<void> main(List<String> args) async {
   sys__.writeFileString('pubspec.yaml', yaml);
   final $run = run__.CommandRunner();
   String projectName = yamlMagic['name'];
+  List<String> hostedPackageList = dart_scan__
+      .findHostedDependenciesInPubspecYaml('pubspec.yaml');
+  List<String> gitPackageList = dart_scan__.findGitDependenciesInPubspecYaml(
+    'pubspec.yaml',
+  );
+  List<String> pathPackageList = dart_scan__.findPathDependenciesInPubspecYaml(
+    'pubspec.yaml',
+  );
   List<String> packageList = dart_scan__.packagesInSourceDirectory([
     '*.',
     './bin',
     './lib',
   ], './test');
-  //echo(packageList, r'packageList');
-  List<String> existingPackageList = dart_scan__
-      .findHostedDependenciesInPubspecYaml('pubspec.yaml');
-  //echo(existingPackageList, r'existingPackageList');
-  existingPackageList =
-      existingPackageList.where((x) => !packageList.contains(x)).toList();
-  existingPackageList =
-      existingPackageList.map((x) => x.replaceFirst('dev:', '')).toList();
-  existingPackageList.remove('cupertino_icons');
-  if (existingPackageList.isNotEmpty) {
+  packageList =
+      packageList
+          .where(
+            (x) => !gitPackageList.contains(x) && !pathPackageList.contains(x),
+          )
+          .toList();
+  hostedPackageList =
+      hostedPackageList.where((x) => !packageList.contains(x)).toList();
+  hostedPackageList =
+      hostedPackageList.map((x) => x.replaceFirst('dev:', '')).toList();
+  hostedPackageList.remove('cupertino_icons');
+  if (hostedPackageList.isNotEmpty) {
     await $run.run$([
       dart,
       'pub',
       'remove',
       '--offline',
       '--no-precompile',
-      ...existingPackageList,
+      ...hostedPackageList,
     ], autoQuote: false);
   }
   packageList.remove(projectName);
@@ -129,6 +139,7 @@ Future<void> main(List<String> args) async {
     yaml += '\n';
   }
   sys__.writeFileString('pubspec.yaml', yaml);
+  await $run.run$([dart, 'pub', 'get'], autoQuote: false);
   if (packageList.contains('embed_annotation')) {
     List<String> $generatedFiles = sys__.pathFiles('.', true);
     $generatedFiles =
