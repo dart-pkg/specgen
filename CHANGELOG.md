@@ -170,3 +170,16 @@
 -version: 2025.427.2226
 +version: 2025.427.2259
 ```
+
+## 2025.427.2303
+
+- Removed debug messages
+
+```
+--- a/pubspec.yaml
++++ b/pubspec.yaml
+-version: 2025.427.2259
++version: 2025.427.2303
+-  output: ^2025.426.2027
++  output: ^2025.426.2027
+```

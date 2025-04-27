@@ -8,7 +8,7 @@ import 'package:std/command_runner.dart' as run__;
 
 //import 'package:yaml_edit/yaml_edit.dart' as yaml_edit__;
 import 'package:yaml_magic/yaml_magic.dart' as yaml_magic__;
-import 'package:output/output.dart';
+//import 'package:output/output.dart';
 
 final String yamlTemplate = '''
 name:
@@ -44,7 +44,7 @@ Future<void> main(List<String> args) async {
     cwd = sys__.pathDirectoryName(cwd);
     sys__.setCwd(cwd);
   }
-  echo(cwd, 'cwd');
+  //echo(cwd, 'cwd');
   bool isFlutter = false;
   String dart = 'dart';
   // yaml_edit__.YamlEditor $ye = yaml_edit__.YamlEditor(yamlTemplate);
@@ -83,11 +83,9 @@ Future<void> main(List<String> args) async {
     }
     lines2.add(lines1[i]);
   }
-  echo(lines2, r'lines2');
-  //yaml = '${lines2.join('\n')}\n';
+  //echo(lines2, r'lines2');
   yaml = lines2.join('\n');
   sys__.writeFileString('pubspec.yaml', yaml);
-  // String projectName = $ye.parseAt(['name']).value;
   final $run = run__.CommandRunner();
   String projectName = yamlMagic['name'];
   List<String> packageList = dart_scan__.packagesInSourceDirectory([
@@ -95,10 +93,10 @@ Future<void> main(List<String> args) async {
     './bin',
     './lib',
   ], './test');
-  echo(packageList, r'packageList');
+  //echo(packageList, r'packageList');
   List<String> existingPackageList = dart_scan__
       .findHostedDependenciesInPubspecYaml('pubspec.yaml');
-  echo(existingPackageList, r'existingPackageList');
+  //echo(existingPackageList, r'existingPackageList');
   existingPackageList =
       existingPackageList.where((x) => !packageList.contains(x)).toList();
   existingPackageList =
@@ -135,7 +133,7 @@ Future<void> main(List<String> args) async {
   }
   List<String> protos = sys__.pathFiles('.', true);
   protos = protos.where((x) => x.endsWith('.proto')).toList();
-  echo(protos, 'protos');
+  //echo(protos, 'protos');
   if (protos.isNotEmpty) {
     await io__.Directory('./lib/src/generated').create(recursive: true);
     for (int i = 0; i < protos.length; i++) {
