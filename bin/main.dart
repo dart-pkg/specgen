@@ -85,6 +85,9 @@ Future<void> main(List<String> args) async {
   }
   //echo(lines2, r'lines2');
   yaml = lines2.join('\n');
+  if (!yaml.endsWith('\n')) {
+    yaml += '\n';
+  }
   sys__.writeFileString('pubspec.yaml', yaml);
   final $run = run__.CommandRunner();
   String projectName = yamlMagic['name'];

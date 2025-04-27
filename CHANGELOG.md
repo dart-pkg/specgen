@@ -183,3 +183,14 @@
 -  output: ^2025.426.2027
 +  output: ^2025.426.2027
 ```
+
+## 2025.427.2326
+
+- Fixed bug of pubspec.yaml note ending with newline
+
+```
+--- a/pubspec.yaml
++++ b/pubspec.yaml
+-version: 2025.427.2303
++version: 2025.427.2326
+```
