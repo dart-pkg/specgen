@@ -88,24 +88,30 @@ Future<void> main(List<String> args) async {
   // String projectName = $ye.parseAt(['name']).value;
   final $run = run__.CommandRunner();
   String projectName = yamlMagic['name'];
-  List<String> existingPackageList = dart_scan__
-      .findHostedDependenciesInPubspecYaml('pubspec.yaml');
-  existingPackageList =
-      existingPackageList.map((x) => x.replaceFirst('dev:', '')).toList();
-  existingPackageList.remove('cupertino_icons');
-  if (existingPackageList.isNotEmpty) {
-    $run.run$([
-      dart,
-      'pub',
-      'remove',
-      ...existingPackageList,
-    ], autoQuote: false);
-  }
   List<String> packageList = dart_scan__.packagesInSourceDirectory([
     '*.',
     './bin',
     './lib',
   ], './test');
+  echo(packageList, r'packageList');
+  List<String> existingPackageList = dart_scan__
+      .findHostedDependenciesInPubspecYaml('pubspec.yaml');
+  echo(existingPackageList, r'existingPackageList');
+  existingPackageList =
+      existingPackageList.where((x) => !packageList.contains(x)).toList();
+  existingPackageList =
+      existingPackageList.map((x) => x.replaceFirst('dev:', '')).toList();
+  existingPackageList.remove('cupertino_icons');
+  if (existingPackageList.isNotEmpty) {
+    await $run.run$([
+      dart,
+      'pub',
+      'remove',
+      '--offline',
+      '--no-precompile',
+      ...existingPackageList,
+    ], autoQuote: false);
+  }
   packageList.remove(projectName);
   packageList.remove('dev:$projectName');
   packageList.remove('flutter');
