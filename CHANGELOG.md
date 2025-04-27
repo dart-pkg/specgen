@@ -101,3 +101,18 @@
 +  std: ^2025.426.2248
 +  sys: ^2025.426.2256
 ```
+
+## 2025.427.1717
+
+- Update dependencies
+
+```
+--- a/pubspec.yaml
++++ b/pubspec.yaml
+-version: 2025.426.2358
++version: 2025.427.1717
+-  dart_scan: ^2025.426.1731
++  dart_scan: ^2025.427.1709
+-  std: ^2025.426.2248
++  std: ^2025.427.52
+```
