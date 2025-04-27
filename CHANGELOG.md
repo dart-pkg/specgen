@@ -194,3 +194,14 @@
 -version: 2025.427.2303
 +version: 2025.427.2326
 ```
+
+## 2025.427.2341
+
+- Fixed newline bug
+
+```
+--- a/pubspec.yaml
++++ b/pubspec.yaml
+-version: 2025.427.2326
++version: 2025.427.2341
+```

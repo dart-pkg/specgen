@@ -73,21 +73,6 @@ Future<void> main(List<String> args) async {
     yamlMagic['version'] = version;
   }
   String yaml = yamlMagic.toString();
-  List<String> lines1 = sys__.textToLines(yaml);
-  List<String> lines2 = <String>[];
-  for (int i = 0; i < lines1.length; i++) {
-    if (i > 0) {
-      if (lines1[i] == '' && lines1[i - 1] == '') {
-        continue;
-      }
-    }
-    lines2.add(lines1[i]);
-  }
-  //echo(lines2, r'lines2');
-  yaml = lines2.join('\n');
-  if (!yaml.endsWith('\n')) {
-    yaml += '\n';
-  }
   sys__.writeFileString('pubspec.yaml', yaml);
   final $run = run__.CommandRunner();
   String projectName = yamlMagic['name'];
@@ -125,6 +110,25 @@ Future<void> main(List<String> args) async {
     packageList.add('dev:build_runner');
   }
   await $run.run$([dart, 'pub', 'add', ...packageList], autoQuote: false);
+
+  yaml = sys__.readFileString('pubspec.yaml');
+  List<String> lines1 = sys__.textToLines(yaml);
+  List<String> lines2 = <String>[];
+  for (int i = 0; i < lines1.length; i++) {
+    if (i > 0) {
+      if (lines1[i] == '' && lines1[i - 1] == '') {
+        continue;
+      }
+    }
+    lines2.add(lines1[i]);
+  }
+  yaml = lines2.join('\n');
+  if (yaml.endsWith('\n\n')) {
+    yaml = yaml.substring(0, yaml.length - 1);
+  } else if (!yaml.endsWith('\n')) {
+    yaml += '\n';
+  }
+  sys__.writeFileString('pubspec.yaml', yaml);
   if (packageList.contains('embed_annotation')) {
     List<String> $generatedFiles = sys__.pathFiles('.', true);
     $generatedFiles =
