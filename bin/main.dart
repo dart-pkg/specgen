@@ -105,8 +105,8 @@ Future<void> main(List<String> args) async {
       dart,
       'pub',
       'remove',
-      '--offline',
-      '--no-precompile',
+      //'--offline',
+      //'--no-precompile',
       ...hostedPackageList,
     ], autoQuote: false);
   }

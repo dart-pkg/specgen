@@ -235,3 +235,14 @@
 +  std: ^2025.428.1703
 +  sys: ^2025.428.1721
 ```
+
+## 2025.429.235
+
+- Removed --offline flag from dart pub remove operation
+
+```
+--- a/pubspec.yaml
++++ b/pubspec.yaml
+-version: 2025.428.1741
++version: 2025.429.235
+```
