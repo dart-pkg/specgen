@@ -218,3 +218,20 @@
 -  dart_scan: ^2025.427.2004
 +  dart_scan: ^2025.428.15
 ```
+
+## 2025.428.1741
+
+- Update package dependencies
+
+```
+--- a/pubspec.yaml
++++ b/pubspec.yaml
+-version: 2025.428.28
++version: 2025.428.1741
+-  dart_scan: ^2025.428.15
+-  std: ^2025.427.52
+-  sys: ^2025.427.1718
++  dart_scan: ^2025.428.1730
++  std: ^2025.428.1703
++  sys: ^2025.428.1721
+```
