@@ -18,5 +18,5 @@ dependencies:
   yaml_magic: ^1.0.6
 dev_dependencies:
   test: ^1.25.15
-  output: ^2025.428.931
+  output: ^2025.430.1731
   lints: ^5.1.1
