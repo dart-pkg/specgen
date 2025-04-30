@@ -1,13 +1,11 @@
 #! /usr/bin/env my-dart
 
 import 'dart:core';
-import 'dart:io' as io__;
-import 'package:dart_scan/dart_scan.dart' as dart_scan__;
-import 'package:sys/sys.dart' as sys__;
-import 'package:std/command_runner.dart' as run__;
-
-//import 'package:yaml_edit/yaml_edit.dart' as yaml_edit__;
-import 'package:yaml_magic/yaml_magic.dart' as yaml_magic__;
+import 'dart:io' as dart_io;
+import 'package:dart_scan/dart_scan.dart' as dart_scan;
+import 'package:sys/sys.dart' as sys_sys;
+import 'package:std/command_runner.dart' as std_command_runner;
+import 'package:yaml_magic/yaml_magic.dart' as yaml_magic;
 //import 'package:output/output.dart';
 
 final String yamlTemplate = '''
@@ -38,27 +36,27 @@ Future<void> main(List<String> args) async {
   if (args.isNotEmpty) {
     version = args[0];
   }
-  String cwd = sys__.getCwd();
-  String fn = sys__.pathFileName(cwd);
+  String cwd = sys_sys.getCwd();
+  String fn = sys_sys.pathFileName(cwd);
   if (fn == 'bin' || fn == 'lib' || fn == 'test') {
-    cwd = sys__.pathDirectoryName(cwd);
-    sys__.setCwd(cwd);
+    cwd = sys_sys.pathDirectoryName(cwd);
+    sys_sys.setCwd(cwd);
   }
   //echo(cwd, 'cwd');
   bool isFlutter = false;
   String dart = 'dart';
   // yaml_edit__.YamlEditor $ye = yaml_edit__.YamlEditor(yamlTemplate);
-  String defaultProjectName = sys__.pathFileName(cwd);
+  String defaultProjectName = sys_sys.pathFileName(cwd);
   defaultProjectName = defaultProjectName
       .replaceAll('.', '_')
       .replaceAll('-', '_');
   // $ye.update(['name'], defaultProjectName);
   // $ye.update(['description'], '$defaultProjectName project');
-  yaml_magic__.YamlMagic yamlMagic;
-  if (sys__.fileExists('pubspec.yaml')) {
-    yamlMagic = yaml_magic__.YamlMagic.load('pubspec.yaml');
+  yaml_magic.YamlMagic yamlMagic;
+  if (sys_sys.fileExists('pubspec.yaml')) {
+    yamlMagic = yaml_magic.YamlMagic.load('pubspec.yaml');
   } else {
-    yamlMagic = yaml_magic__.YamlMagic.fromString(
+    yamlMagic = yaml_magic.YamlMagic.fromString(
       content: yamlTemplate,
       path: 'pubspec.yaml',
     );
@@ -73,18 +71,18 @@ Future<void> main(List<String> args) async {
     yamlMagic['version'] = version;
   }
   String yaml = yamlMagic.toString();
-  sys__.writeFileString('pubspec.yaml', yaml);
-  final $run = run__.CommandRunner();
+  sys_sys.writeFileString('pubspec.yaml', yaml);
+  final $run = std_command_runner.CommandRunner();
   String projectName = yamlMagic['name'];
-  List<String> hostedPackageList = dart_scan__
+  List<String> hostedPackageList = dart_scan
       .findHostedDependenciesInPubspecYaml('pubspec.yaml');
-  List<String> gitPackageList = dart_scan__.findGitDependenciesInPubspecYaml(
+  List<String> gitPackageList = dart_scan.findGitDependenciesInPubspecYaml(
     'pubspec.yaml',
   );
-  List<String> pathPackageList = dart_scan__.findPathDependenciesInPubspecYaml(
+  List<String> pathPackageList = dart_scan.findPathDependenciesInPubspecYaml(
     'pubspec.yaml',
   );
-  List<String> packageList = dart_scan__.packagesInSourceDirectory([
+  List<String> packageList = dart_scan.packagesInSourceDirectory([
     '*.',
     './bin',
     './lib',
@@ -105,8 +103,6 @@ Future<void> main(List<String> args) async {
       dart,
       'pub',
       'remove',
-      //'--offline',
-      //'--no-precompile',
       ...hostedPackageList,
     ], autoQuote: false);
   }
@@ -121,8 +117,8 @@ Future<void> main(List<String> args) async {
   }
   await $run.run$([dart, 'pub', 'add', ...packageList], autoQuote: false);
 
-  yaml = sys__.readFileString('pubspec.yaml');
-  List<String> lines1 = sys__.textToLines(yaml);
+  yaml = sys_sys.readFileString('pubspec.yaml');
+  List<String> lines1 = sys_sys.textToLines(yaml);
   List<String> lines2 = <String>[];
   for (int i = 0; i < lines1.length; i++) {
     if (i > 0) {
@@ -138,26 +134,26 @@ Future<void> main(List<String> args) async {
   } else if (!yaml.endsWith('\n')) {
     yaml += '\n';
   }
-  sys__.writeFileString('pubspec.yaml', yaml);
+  sys_sys.writeFileString('pubspec.yaml', yaml);
   await $run.run$([dart, 'pub', 'get'], autoQuote: false);
   if (packageList.contains('embed_annotation')) {
-    List<String> $generatedFiles = sys__.pathFiles('.', true);
+    List<String> $generatedFiles = sys_sys.pathFiles('.', true);
     $generatedFiles =
         $generatedFiles.where(($x) => $x.endsWith('.g.dart')).toList();
     for (int $i = 0; $i < $generatedFiles.length; $i++) {
-      io__.File($generatedFiles[$i]).deleteSync();
+      dart_io.File($generatedFiles[$i]).deleteSync();
     }
     await $run.run('$dart run build_runner build');
   }
-  List<String> protos = sys__.pathFiles('.', true);
+  List<String> protos = sys_sys.pathFiles('.', true);
   protos = protos.where((x) => x.endsWith('.proto')).toList();
   //echo(protos, 'protos');
   if (protos.isNotEmpty) {
-    await io__.Directory('./lib/src/generated').create(recursive: true);
+    await dart_io.Directory('./lib/src/generated').create(recursive: true);
     for (int i = 0; i < protos.length; i++) {
       String proto = protos[i];
       $run.run(
-        'protoc --dart_out=grpc:lib/src/generated -I"${sys__.pathDirectoryName(proto)}" "${sys__.pathFileName(proto)}"',
+        'protoc --dart_out=grpc:lib/src/generated -I"${sys_sys.pathDirectoryName(proto)}" "${sys_sys.pathFileName(proto)}"',
       );
     }
   }
