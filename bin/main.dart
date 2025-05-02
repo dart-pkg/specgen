@@ -47,9 +47,6 @@ Future<void> main(List<String> args) async {
   String dart = 'dart';
   // yaml_edit__.YamlEditor $ye = yaml_edit__.YamlEditor(yamlTemplate);
   String defaultProjectName = sys_sys.pathFileName(cwd);
-  // defaultProjectName = defaultProjectName
-  //     .replaceAll('.', '_')
-  //     .replaceAll('-', '_');
   defaultProjectName = sys_sys.adjustPackageName(defaultProjectName);
   yaml_magic.YamlMagic yamlMagic;
   if (sys_sys.fileExists('pubspec.yaml')) {
@@ -115,25 +112,7 @@ Future<void> main(List<String> args) async {
     packageList.add('dev:build_runner');
   }
   await $run.run$([dart, 'pub', 'add', ...packageList], autoQuote: false);
-
-  yaml = sys_sys.readFileString('pubspec.yaml');
-  List<String> lines1 = sys_sys.textToLines(yaml);
-  List<String> lines2 = <String>[];
-  for (int i = 0; i < lines1.length; i++) {
-    if (i > 0) {
-      if (lines1[i] == '' && lines1[i - 1] == '') {
-        continue;
-      }
-    }
-    lines2.add(lines1[i]);
-  }
-  yaml = lines2.join('\n');
-  if (yaml.endsWith('\n\n')) {
-    yaml = yaml.substring(0, yaml.length - 1);
-  } else if (!yaml.endsWith('\n')) {
-    yaml += '\n';
-  }
-  sys_sys.writeFileString('pubspec.yaml', yaml);
+  sys_sys.reformatUglyYamlFile('pubspec.yaml');
   await $run.run$([dart, 'pub', 'get'], autoQuote: false);
   if (packageList.contains('embed_annotation')) {
     List<String> $generatedFiles = sys_sys.pathFiles('.', true);
