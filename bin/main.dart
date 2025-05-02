@@ -47,11 +47,10 @@ Future<void> main(List<String> args) async {
   String dart = 'dart';
   // yaml_edit__.YamlEditor $ye = yaml_edit__.YamlEditor(yamlTemplate);
   String defaultProjectName = sys_sys.pathFileName(cwd);
-  defaultProjectName = defaultProjectName
-      .replaceAll('.', '_')
-      .replaceAll('-', '_');
-  // $ye.update(['name'], defaultProjectName);
-  // $ye.update(['description'], '$defaultProjectName project');
+  // defaultProjectName = defaultProjectName
+  //     .replaceAll('.', '_')
+  //     .replaceAll('-', '_');
+  defaultProjectName = sys_sys.adjustPackageName(defaultProjectName);
   yaml_magic.YamlMagic yamlMagic;
   if (sys_sys.fileExists('pubspec.yaml')) {
     yamlMagic = yaml_magic.YamlMagic.load('pubspec.yaml');
