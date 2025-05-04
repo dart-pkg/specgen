@@ -310,3 +310,20 @@
 -  sys: ^2025.503.6
 +  sys: ^2025.503.56
 ```
+
+## 2025.504.1212
+
+- Update package dependencies
+
+```
+--- a/pubspec.yaml
++++ b/pubspec.yaml
+-version: 2025.503.104
++version: 2025.504.1212
+-  dart_scan: ^2025.503.13
+-  std: ^2025.502.2358
+-  sys: ^2025.503.56
++  dart_scan: ^2025.504.1204
++  std: ^2025.504.1143
++  sys: ^2025.504.1149
+```
