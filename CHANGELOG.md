@@ -342,3 +342,14 @@
 +  std: ^2025.504.1244
 +  sys: ^2025.504.1255
 ```
+
+## 2025.510.2148
+
+- Auto change dir functionality removed
+
+```
+--- a/pubspec.yaml
++++ b/pubspec.yaml
+-version: 2025.510.2109
++version: 2025.510.2148
+```

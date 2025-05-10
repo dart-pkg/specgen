@@ -37,11 +37,11 @@ Future<void> main(List<String> args) async {
     version = args[0];
   }
   String cwd = sys_sys.getCwd();
-  String fn = sys_sys.pathFileName(cwd);
-  if (fn == 'bin' || fn == 'lib' || fn == 'test') {
-    cwd = sys_sys.pathDirectoryName(cwd);
-    sys_sys.setCwd(cwd);
-  }
+  // String fn = sys_sys.pathFileName(cwd);
+  // if (fn == 'bin' || fn == 'lib' || fn == 'test') {
+  //   cwd = sys_sys.pathDirectoryName(cwd);
+  //   sys_sys.setCwd(cwd);
+  // }
   //echo(cwd, 'cwd');
   bool isFlutter = false;
   String dart = 'dart';
