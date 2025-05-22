@@ -353,3 +353,20 @@
 -version: 2025.510.2109
 +version: 2025.510.2148
 ```
+
+## 2025.523.149
+
+- Update dependencies
+
+```
+--- a/pubspec.yaml
++++ b/pubspec.yaml
+-version: 2025.510.2148
++version: 2025.523.149
+-  std: ^2025.504.1244
+-  sys: ^2025.504.1255
++  std: ^2025.513.452
++  sys: ^2025.513.437
+-  test: ^1.25.15
++  test: ^1.26.2
+```

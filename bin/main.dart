@@ -1,4 +1,4 @@
-#! /usr/bin/env my-dart
+#! /usr/bin/env dart
 
 import 'dart:core';
 import 'dart:io' as dart_io;
