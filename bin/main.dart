@@ -4,7 +4,7 @@ import 'dart:core';
 import 'dart:io' as dart_io;
 import 'package:dart_scan/dart_scan.dart' as dart_scan;
 import 'package:sys/sys.dart' as sys_sys;
-import 'package:std/command_runner.dart' as std_command_runner;
+//import 'package:std/command_runner.dart' as std_command_runner;
 import 'package:yaml_magic/yaml_magic.dart' as yaml_magic;
 //import 'package:output/output.dart';
 
@@ -68,7 +68,7 @@ Future<void> main(List<String> args) async {
   }
   String yaml = yamlMagic.toString();
   sys_sys.writeFileString('pubspec.yaml', yaml);
-  final $run = std_command_runner.CommandRunner();
+  final $run = sys_sys.CommandRunner();
   String projectName = yamlMagic['name'];
   List<String> hostedPackageList = dart_scan
       .findHostedDependenciesInPubspecYaml('pubspec.yaml');

@@ -370,3 +370,15 @@
 -  test: ^1.25.15
 +  test: ^1.26.2
 ```
+
+## 2025.523.152
+
+- Update dependencies
+
+```
+--- a/pubspec.yaml
++++ b/pubspec.yaml
+-version: 2025.523.149
++version: 2025.523.152
+-  std: ^2025.513.452
+```
