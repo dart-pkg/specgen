@@ -399,3 +399,18 @@
 -  lints: ^5.1.1
 +  lints: ^6.0.0
 ```
+
+## 2025.526.2344
+
+- Update dependencies
+
+```
+--- a/pubspec.yaml
++++ b/pubspec.yaml
+-version: 2025.526.2212
++version: 2025.526.2344
+-  dart_scan: ^2025.526.1920
+-  sys: ^2025.526.2051
++  dart_scan: ^2025.526.2339
++  std: ^2025.526.2333
+```
