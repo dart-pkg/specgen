@@ -382,3 +382,20 @@
 +version: 2025.523.152
 -  std: ^2025.513.452
 ```
+
+## 2025.526.2212
+
+- Update dependencies
+
+```
+--- a/pubspec.yaml
++++ b/pubspec.yaml
+-version: 2025.523.152
++version: 2025.526.2212
+-  dart_scan: ^2025.504.1204
+-  sys: ^2025.513.437
++  dart_scan: ^2025.526.1920
++  sys: ^2025.526.2051
+-  lints: ^5.1.1
++  lints: ^6.0.0
+```
